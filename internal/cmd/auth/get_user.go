@@ -9,14 +9,14 @@ import (
 	"github.com/swayrider/swctl/internal/logic"
 )
 
-var DeleteServiceClient = &cli.Command{
-	Name:    "delete-service-client",
-	Aliases: []string{"dsc"},
-	Usage:   "Delete a service client",
+var GetUser = &cli.Command{
+	Name:    "get-user",
+	Aliases: []string{"gu"},
+	Usage:   "Get user info by email or user ID",
 	Arguments: []cli.Argument{
 		&cli.StringArg{
-			Name:      "clientId",
-			UsageText: "<clientId> The ClientID of the service client",
+			Name:      "identifier",
+			UsageText: "<email|userId> The email address or user ID of the user",
 		},
 	},
 	Flags: []cli.Flag{
@@ -24,23 +24,22 @@ var DeleteServiceClient = &cli.Command{
 		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
 	Action: func(ctx context.Context, c *cli.Command) error {
-		clientId := c.StringArg("clientId")
-		if clientId == "" {
-			return fmt.Errorf("clientId is required")
+		identifier := c.StringArg("identifier")
+		if identifier == "" {
+			return fmt.Errorf("identifier (email or user ID) is required")
 		}
 
-		err := logic.DeleteServiceClient(
+		user, err := logic.GetUser(
 			c.String("auth-host"),
 			c.Int("auth-port"),
 			c.String("user"),
 			c.String("password"),
-			c.StringArg("clientId"),
+			identifier,
 		)
 		if err != nil {
 			return err
 		}
-
-		fmt.Printf("Deleted service client %s\n", clientId)
+		user.Display()
 		return nil
 	},
 }

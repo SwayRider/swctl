@@ -1,4 +1,4 @@
-package auth
+package search
 
 import (
 	"github.com/urfave/cli/v3"
@@ -6,21 +6,16 @@ import (
 )
 
 var Command = &cli.Command{
-	Name:  "auth",
-	Usage: "Interact with the authservice",
+	Name:  "search",
+	Usage: "Geocode and reverse geocode via the SearchService",
 	Flags: []cli.Flag{
 		flags.Required(flags.Host("Auth")),
 		flags.Required(flags.Port("Auth")),
+		flags.Required(flags.Host("Search")),
+		flags.Required(flags.Port("Search")),
 	},
 	Commands: []*cli.Command{
-		WhoAmI,
-		GetUser,
-		CheckPasswordStrength,
-		CreateAdmin,
-		CreateUser,
-		ChangePassword,
-		CreateServiceClient,
-		ListServiceClients,
-		DeleteServiceClient,
+		Geocode,
+		Reverse,
 	},
 }

@@ -9,14 +9,14 @@ import (
 	"github.com/swayrider/swctl/internal/logic"
 )
 
-var DeleteServiceClient = &cli.Command{
-	Name:    "delete-service-client",
-	Aliases: []string{"dsc"},
-	Usage:   "Delete a service client",
+var ChangePassword = &cli.Command{
+	Name:    "change-password",
+	Aliases: []string{"chp"},
+	Usage:   "Change the password for the authenticated user (--password is used as the current/old password)",
 	Arguments: []cli.Argument{
 		&cli.StringArg{
-			Name:      "clientId",
-			UsageText: "<clientId> The ClientID of the service client",
+			Name:      "newPassword",
+			UsageText: "<newPassword> The new password",
 		},
 	},
 	Flags: []cli.Flag{
@@ -24,23 +24,22 @@ var DeleteServiceClient = &cli.Command{
 		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
 	Action: func(ctx context.Context, c *cli.Command) error {
-		clientId := c.StringArg("clientId")
-		if clientId == "" {
-			return fmt.Errorf("clientId is required")
+		newPassword := c.StringArg("newPassword")
+		if newPassword == "" {
+			return fmt.Errorf("newPassword is required")
 		}
 
-		err := logic.DeleteServiceClient(
+		msg, err := logic.ChangePassword(
 			c.String("auth-host"),
 			c.Int("auth-port"),
 			c.String("user"),
 			c.String("password"),
-			c.StringArg("clientId"),
+			newPassword,
 		)
 		if err != nil {
 			return err
 		}
-
-		fmt.Printf("Deleted service client %s\n", clientId)
+		fmt.Println(msg)
 		return nil
 	},
 }

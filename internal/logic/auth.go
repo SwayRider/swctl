@@ -2,6 +2,7 @@ package logic
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/swayrider/grpcclients/authclient"
 )
@@ -181,6 +182,8 @@ func ListServiceClients(
 	authPort int,
 	user string,
 	password string,
+	page int,
+	pageSize int,
 ) (list []*ServiceClient, err error) {
 	client, err := newAuthClient(authHost, authPort)
 	if err != nil {
@@ -193,9 +196,9 @@ func ListServiceClients(
 		return
 	}
 
-	l, err := client.ListServiceClients(
+	l, _, err := client.ListServiceClients(
 		accessToken,
-		0, 0,
+		page, pageSize,
 		NewServiceClient)
 	if err != nil {
 		return
@@ -205,6 +208,96 @@ func ListServiceClients(
 	for _, sc := range l {
 		list = append(list, sc.(*ServiceClient))
 	}
+	return
+}
+
+func WhoAmI(
+	authHost string,
+	authPort int,
+	user string,
+	password string,
+) (me *User, err error) {
+	client, err := newAuthClient(authHost, authPort)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+
+	accessToken, _, err := client.Login(user, password, false)
+	if err != nil {
+		return
+	}
+
+	u, err := client.WhoAmI(accessToken, NewUser)
+	if err != nil {
+		return
+	}
+
+	me, ok := u.(*User)
+	if !ok {
+		err = errors.New("failed to get user")
+		return
+	}
+	return
+}
+
+func GetUser(
+	authHost string,
+	authPort int,
+	user string,
+	password string,
+	identifier string,
+) (found *User, err error) {
+	client, err := newAuthClient(authHost, authPort)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+
+	accessToken, _, err := client.Login(user, password, false)
+	if err != nil {
+		return
+	}
+
+	var filter authclient.WhoIsOneOf
+	if strings.Contains(identifier, "@") {
+		filter = authclient.WhoIs_Email(identifier)
+	} else {
+		filter = authclient.WhoIs_UserId(identifier)
+	}
+
+	u, err := client.WhoIs(accessToken, filter, NewUser)
+	if err != nil {
+		return
+	}
+
+	found, ok := u.(*User)
+	if !ok {
+		err = errors.New("failed to get user")
+		return
+	}
+	return
+}
+
+func ChangePassword(
+	authHost string,
+	authPort int,
+	user string,
+	password string,
+	newPassword string,
+) (message string, err error) {
+	client, err := newAuthClient(authHost, authPort)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+
+	accessToken, _, err := client.Login(user, password, false)
+	if err != nil {
+		return
+	}
+
+	message, err = client.ChangePassword(accessToken, password, newPassword)
 	return
 }
 

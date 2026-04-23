@@ -19,6 +19,16 @@ var ListServiceClients = &cli.Command{
 	Flags: []cli.Flag{
 		flags.Required(flags.User("AUTH_USER")),
 		flags.Required(flags.Password("AUTH_PASSWORD")),
+		&cli.IntFlag{
+			Name:  "page",
+			Usage: "Page number (0 = all)",
+			Value: 0,
+		},
+		&cli.IntFlag{
+			Name:  "page-size",
+			Usage: "Number of results per page (0 = all)",
+			Value: 0,
+		},
 	},
 	Action: func(ctx context.Context, c *cli.Command) error {
 		clients, err := logic.ListServiceClients(
@@ -26,6 +36,8 @@ var ListServiceClients = &cli.Command{
 			c.Int("auth-port"),
 			c.String("user"),
 			c.String("password"),
+			c.Int("page"),
+			c.Int("page-size"),
 		)
 		if err != nil {
 			return err

@@ -53,6 +53,7 @@ var CreateServiceClient = &cli.Command{
 			return err
 		}
 
+		fmt.Println("WARNING: Store the client secret securely — it will not be shown again.")
 		fmt.Printf("client id: %s\nclient secret: %s\n", clientId, clientSecret)
 		return nil
 	},
