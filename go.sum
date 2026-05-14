@@ -33,6 +33,8 @@ github.com/swayrider/protos v0.1.1 h1:8FOYwavGfaon1ylw07DeMgttU+ZitoN6nK4hCZO/7F
 github.com/swayrider/protos v0.1.1/go.mod h1:e5VCOSgkeRKptyLYV0l351sdHpuzhnpN81UZT8LOXRg=
 github.com/swayrider/swlib v0.1.1 h1:1PTJTHMonoX/AC9gvkzHG+VdYt6gEt/MpDC2F514dw4=
 github.com/swayrider/swlib v0.1.1/go.mod h1:5PWYUKOJxXenwyZJMd5pfKwJa/U092Oc3SDj+yyIFTk=
+github.com/swayrider/swlib v0.1.2-0.20260513190938-e9124987785d h1:TPqQ9RN7mNHdwrFfFxte4urbW8cO6DF1Ot3SNQrgyx8=
+github.com/swayrider/swlib v0.1.2-0.20260513190938-e9124987785d/go.mod h1:mSScpgfHXCO2K+NTCxRHA+ZPsrEJF4FGRUVU1WPLKn8=
 github.com/urfave/cli/v3 v3.8.0 h1:XqKPrm0q4P0q5JpoclYoCAv0/MIvH/jZ2umzuf8pNTI=
 github.com/urfave/cli/v3 v3.8.0/go.mod h1:ysVLtOEmg2tOy6PknnYVhDoouyC/6N42TMeoMzskhso=
 go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=
