@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1.4
-# Build context must be the repo root (go.work covers all modules).
 FROM --platform=$BUILDPLATFORM golang:latest AS builder
 
 ARG TARGETOS
@@ -9,17 +8,16 @@ ENV CGO_ENABLED=0
 ENV GOOS=${TARGETOS}
 ENV GOARCH=${TARGETARCH}
 
-WORKDIR /build
+WORKDIR /app
 
-COPY go.work go.work.sum ./
-COPY swlib/ swlib/
-COPY grpcclients/ grpcclients/
-COPY protos/ protos/
-COPY swctl/ swctl/
+COPY . .
 
-RUN go build -o /swctl ./swctl/cmd/swctl
+RUN go clean -modcache && \
+    go mod download && \
+    go build -o swctl ./cmd/swctl
 
 FROM --platform=$TARGETPLATFORM debian:bookworm-slim
-COPY --from=builder /swctl /swctl
+WORKDIR /app
+COPY --from=builder /app/swctl .
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-ENTRYPOINT ["/swctl"]
+ENTRYPOINT ["/app/swctl"]

@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	github.com/jedib0t/go-pretty/v6 v6.7.10
 	github.com/joho/godotenv v1.5.1
-	github.com/swayrider/grpcclients v0.1.1
+	github.com/swayrider/grpcclients v0.1.2-0.20260513193630-fb9b503de3d0
 	github.com/swayrider/swlib v0.1.2-0.20260513190938-e9124987785d
 	github.com/urfave/cli/v3 v3.8.0
 )
