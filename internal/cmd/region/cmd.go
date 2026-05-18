@@ -11,6 +11,10 @@ var Command = &cli.Command{
 	Flags: []cli.Flag{
 		flags.Required(flags.Host("Region")),
 		flags.Required(flags.Port("Region")),
+		flags.Required(flags.Host("Auth")),
+		flags.Required(flags.Port("Auth")),
+		flags.Required(flags.User("AUTH_USER")),
+		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
 	Commands: []*cli.Command{
 		SearchPoint,

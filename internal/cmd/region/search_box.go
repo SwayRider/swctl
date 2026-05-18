@@ -66,6 +66,10 @@ var SearchBox = &cli.Command{
 		}
 
 		regions, err := logic.RegionSearchBox(
+			c.String("auth-host"),
+			c.Int("auth-port"),
+			c.String("user"),
+			c.String("password"),
 			c.String("region-host"),
 			c.Int("region-port"),
 			minLat, minLon, maxLat, maxLon,
