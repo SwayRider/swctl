@@ -20,6 +20,7 @@ var Command = &cli.Command{
 		CreateUser,
 		ChangePassword,
 		CreateServiceClient,
+		EnsureServiceClient,
 		ListServiceClients,
 		DeleteServiceClient,
 	},
