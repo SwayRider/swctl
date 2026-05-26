@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/swayrider/grpcclients/authclient"
 )
@@ -75,6 +76,28 @@ func (u User) Display() {
 	fmt.Printf(
 		"\tEmail: %s\n\tUserID: %s\n\tAccount Type: %s\n\tVerified: %t\n\tAdmin: %t\n",
 		u.email, u.userId, u.accountType, u.isVerified, u.isAdmin)
+}
+
+type Invite struct {
+	id        string
+	email     string
+	createdAt time.Time
+}
+
+func (i Invite) Id() string {
+	return i.id
+}
+
+func (i Invite) Email() string {
+	return i.email
+}
+
+func (i Invite) CreatedAt() time.Time {
+	return i.createdAt
+}
+
+func NewInvite(id string, email string, createdAt time.Time) authclient.Invite {
+	return &Invite{id: id, email: email, createdAt: createdAt}
 }
 
 func NewUser(
