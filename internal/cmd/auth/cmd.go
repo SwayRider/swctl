@@ -23,5 +23,8 @@ var Command = &cli.Command{
 		EnsureServiceClient,
 		ListServiceClients,
 		DeleteServiceClient,
+		InviteUser,
+		RevokeInvite,
+		ListInvites,
 	},
 }

@@ -322,3 +322,70 @@ func DeleteServiceClient(
 	_, err = client.DeleteServiceClient(accessToken, clientId)
 	return
 }
+
+func InviteUser(
+	authHost string,
+	authPort int,
+	user string,
+	password string,
+	email string,
+) (message string, err error) {
+	client, err := newAuthClient(authHost, authPort)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+
+	accessToken, _, err := client.Login(user, password, false)
+	if err != nil {
+		return
+	}
+
+	message, err = client.InviteUser(accessToken, email)
+	return
+}
+
+func RevokeInvite(
+	authHost string,
+	authPort int,
+	user string,
+	password string,
+	email string,
+) (message string, err error) {
+	client, err := newAuthClient(authHost, authPort)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+
+	accessToken, _, err := client.Login(user, password, false)
+	if err != nil {
+		return
+	}
+
+	message, err = client.RevokeInvite(accessToken, email)
+	return
+}
+
+func ListInvites(
+	authHost string,
+	authPort int,
+	user string,
+	password string,
+	page int,
+	pageSize int,
+) (invites []authclient.Invite, err error) {
+	client, err := newAuthClient(authHost, authPort)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+
+	accessToken, _, err := client.Login(user, password, false)
+	if err != nil {
+		return
+	}
+
+	invites, _, err = client.ListInvites(accessToken, page, pageSize, NewInvite)
+	return
+}
