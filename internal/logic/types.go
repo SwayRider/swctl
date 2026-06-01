@@ -79,9 +79,10 @@ func (u User) Display() {
 }
 
 type Invite struct {
-	id        string
-	email     string
-	createdAt time.Time
+	id         string
+	email      string
+	createdAt  time.Time
+	registered bool
 }
 
 func (i Invite) Id() string {
@@ -96,8 +97,12 @@ func (i Invite) CreatedAt() time.Time {
 	return i.createdAt
 }
 
-func NewInvite(id string, email string, createdAt time.Time) authclient.Invite {
-	return &Invite{id: id, email: email, createdAt: createdAt}
+func (i Invite) Registered() bool {
+	return i.registered
+}
+
+func NewInvite(id string, email string, createdAt time.Time, registered bool) authclient.Invite {
+	return &Invite{id: id, email: email, createdAt: createdAt, registered: registered}
 }
 
 func NewUser(

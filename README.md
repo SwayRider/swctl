@@ -17,6 +17,9 @@ Management CLI tool for the SwayRider platform. Provides command-line access to 
     - [auth create-service-client](#auth-create-service-client)
     - [auth list-service-clients](#auth-list-service-clients)
     - [auth delete-service-client](#auth-delete-service-client)
+    - [auth invite-user](#auth-invite-user)
+    - [auth revoke-invite](#auth-revoke-invite)
+    - [auth list-invites](#auth-list-invites)
   - [health](#health)
     - [health ping](#health-ping)
     - [health check](#health-check)
@@ -368,6 +371,100 @@ swctl auth delete-service-client <clientId> [--user USER] [--password PASSWORD]
 
 ```bash
 swctl auth delete-service-client abc123def456...
+```
+
+---
+
+#### auth invite-user
+
+Add an email address to the registration invite list. Only relevant when the authservice is running in `invite_only` registration mode — users whose email is not on the list will be rejected at registration.
+
+**Alias:** `iu`
+
+```
+swctl auth invite-user <email> [--user USER] [--password PASSWORD]
+```
+
+| Argument | Description |
+|---|---|
+| `email` | Email address to add to the invite list |
+
+| Flag | Env var | Description |
+|---|---|---|
+| `--user`, `-u` | `AUTH_USER` | Admin email (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | Admin password (required) |
+
+**Example:**
+
+```bash
+swctl auth invite-user newuser@example.com
+```
+
+**Output:** A confirmation message from the service.
+
+---
+
+#### auth revoke-invite
+
+Remove an email address from the registration invite list, preventing that address from registering.
+
+**Alias:** `ri`
+
+```
+swctl auth revoke-invite <email> [--user USER] [--password PASSWORD]
+```
+
+| Argument | Description |
+|---|---|
+| `email` | Email address to remove from the invite list |
+
+| Flag | Env var | Description |
+|---|---|---|
+| `--user`, `-u` | `AUTH_USER` | Admin email (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | Admin password (required) |
+
+**Example:**
+
+```bash
+swctl auth revoke-invite newuser@example.com
+```
+
+**Output:** A confirmation message from the service.
+
+---
+
+#### auth list-invites
+
+List all pending registration invites in a formatted table.
+
+**Alias:** `li`
+
+```
+swctl auth list-invites [flags]
+```
+
+| Flag | Env var | Default | Description |
+|---|---|---|---|
+| `--user`, `-u` | `AUTH_USER` | — | Admin email (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | — | Admin password (required) |
+| `--page` | — | `0` | Page number (`0` = all) |
+| `--page-size` | — | `0` | Results per page (`0` = all) |
+
+**Example:**
+
+```bash
+swctl auth list-invites
+swctl auth list-invites --page 1 --page-size 20
+```
+
+**Output:**
+
+```
++-------------------------+--------------------------------------+----------------------+
+| EMAIL                   | ID                                   | CREATED AT           |
++-------------------------+--------------------------------------+----------------------+
+| newuser@example.com     | 7f3a1b2c-dead-beef-0000-000000000042 | 2026-06-01T10:00:00Z |
++-------------------------+--------------------------------------+----------------------+
 ```
 
 ---

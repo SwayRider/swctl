@@ -374,6 +374,7 @@ func ListInvites(
 	password string,
 	page int,
 	pageSize int,
+	registered *bool,
 ) (invites []authclient.Invite, err error) {
 	client, err := newAuthClient(authHost, authPort)
 	if err != nil {
@@ -386,6 +387,6 @@ func ListInvites(
 		return
 	}
 
-	invites, _, err = client.ListInvites(accessToken, page, pageSize, NewInvite)
+	invites, _, err = client.ListInvites(accessToken, page, pageSize, registered, NewInvite)
 	return
 }
