@@ -24,7 +24,7 @@ func Required[T cli.Flag](f T) T {
 
 func setRequiredProp[T cli.Flag](f T, value bool) T {
 	v := reflect.ValueOf(f)
-	if v.Kind() != reflect.Ptr || v.Elem().Kind() != reflect.Struct {
+	if v.Kind() != reflect.Pointer || v.Elem().Kind() != reflect.Struct {
 		return f
 	}
 	structValue := v.Elem()

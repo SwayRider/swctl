@@ -24,7 +24,7 @@ func CheckPasswordStrength(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ok, message, err = client.CheckPasswordStrength(password)
 	return
@@ -42,7 +42,7 @@ func CreateAdmin(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	adminAccessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -88,7 +88,7 @@ func CreateUser(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	adminAccessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -161,7 +161,7 @@ func CreateServiceClient(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -189,7 +189,7 @@ func ListServiceClients(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -221,7 +221,7 @@ func WhoAmI(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -252,7 +252,7 @@ func GetUser(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -290,7 +290,7 @@ func ChangePassword(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -312,7 +312,7 @@ func DeleteServiceClient(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -334,7 +334,7 @@ func InviteUser(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -356,7 +356,7 @@ func RevokeInvite(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {
@@ -380,7 +380,7 @@ func ListInvites(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	accessToken, _, err := client.Login(user, password, false)
 	if err != nil {

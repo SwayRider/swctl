@@ -19,7 +19,7 @@ func regionToken(authHost string, authPort int, user, password string) (string, 
 	if err != nil {
 		return "", err
 	}
-	defer authClient.Close()
+	defer func() { _ = authClient.Close() }()
 	token, _, err := authClient.Login(user, password, false)
 	return token, err
 }
@@ -41,7 +41,7 @@ func RegionSearchPoint(
 	if err != nil {
 		return regionclient.RegionList{}, err
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	return client.SearchPoint(
 		context.Background(),
@@ -68,7 +68,7 @@ func RegionSearchBox(
 	if err != nil {
 		return regionclient.RegionList{}, err
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	return client.SearchBox(
 		context.Background(),
@@ -97,7 +97,7 @@ func RegionFindPath(
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	return client.FindRegionPath(context.Background(), token, fromRegion, toRegion)
 }
