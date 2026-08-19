@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var EnsureServiceClient = &cli.Command{
@@ -44,6 +45,7 @@ var EnsureServiceClient = &cli.Command{
 			Value: 10,
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		output := c.String("output")
 

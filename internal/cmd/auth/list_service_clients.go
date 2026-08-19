@@ -10,6 +10,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var ListServiceClients = &cli.Command{
@@ -30,6 +31,7 @@ var ListServiceClients = &cli.Command{
 			Value: 0,
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		clients, err := logic.ListServiceClients(
 			c.String("auth-host"),

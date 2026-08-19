@@ -193,18 +193,18 @@ Create a new admin user. Requires existing admin credentials to authenticate.
 **Alias:** `ca`
 
 ```
-swctl auth create-admin <email> <password> [--user USER] [--password PASSWORD]
+swctl auth create-admin <email> [password] [--user USER] [--password PASSWORD]
 ```
 
 | Argument | Description |
 |---|---|
 | `email` | Email for the new admin account |
-| `password` | Password for the new admin account |
+| `password` | Password for the new admin account. If omitted, prompted for interactively with masked input — requires a TTY; fails immediately (no prompt) if stdin isn't interactive (CI, pipes) |
 
 | Flag | Env var | Description |
 |---|---|---|
 | `--user`, `-u` | `AUTH_USER` | Authenticating admin email (required) |
-| `--password`, `-p` | `AUTH_PASSWORD` | Authenticating admin password (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | Authenticating admin password. If omitted, prompted for interactively (same TTY rules as above) |
 
 **Example:**
 
@@ -221,18 +221,18 @@ Register a new regular user. Optionally mark them as verified and set their acco
 **Alias:** `cu`
 
 ```
-swctl auth create-user <email> <password> [flags]
+swctl auth create-user <email> [password] [flags]
 ```
 
 | Argument | Description |
 |---|---|
 | `email` | Email for the new user |
-| `password` | Password for the new user |
+| `password` | Password for the new user. If omitted, prompted for interactively with masked input — requires a TTY; fails immediately (no prompt) if stdin isn't interactive (CI, pipes) |
 
 | Flag | Env var | Default | Description |
 |---|---|---|---|
 | `--user`, `-u` | `AUTH_USER` | — | Authenticating admin email (required) |
-| `--password`, `-p` | `AUTH_PASSWORD` | — | Authenticating admin password (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | — | Authenticating admin password. If omitted, prompted for interactively (same TTY rules as above) |
 | `--verified`, `-v` | — | `false` | Mark the user's email as verified immediately |
 | `--account-type`, `-t` | — | `free` | Account type (e.g. `free`, `premium`) |
 
@@ -255,17 +255,17 @@ Change the password for the authenticated user. The `--password` flag provides t
 **Alias:** `chp`
 
 ```
-swctl auth change-password <newPassword> [--user USER] [--password CURRENT_PASSWORD]
+swctl auth change-password [newPassword] [--user USER] [--password CURRENT_PASSWORD]
 ```
 
 | Argument | Description |
 |---|---|
-| `newPassword` | The new password to set |
+| `newPassword` | The new password to set. If omitted, prompted for interactively with masked input — requires a TTY; fails immediately (no prompt) if stdin isn't interactive (CI, pipes) |
 
 | Flag | Env var | Description |
 |---|---|---|
 | `--user`, `-u` | `AUTH_USER` | User email (required) |
-| `--password`, `-p` | `AUTH_PASSWORD` | Current password — used for login and as the old password (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | Current password — used for login and as the old password. If omitted, prompted for interactively (same TTY rules as above) |
 
 **Example:**
 

@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var CreateAdmin = &cli.Command{
@@ -20,13 +21,14 @@ var CreateAdmin = &cli.Command{
 		},
 		&cli.StringArg{
 			Name:      "password",
-			UsageText: "<password> The password of the admin",
+			UsageText: "<password> The password of the admin (optional; prompted if omitted)",
 		},
 	},
 	Flags: []cli.Flag{
 		flags.Required(flags.User("AUTH_USER")),
 		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		email := c.StringArg("email")
 		if email == "" {
@@ -34,7 +36,11 @@ var CreateAdmin = &cli.Command{
 		}
 		pwd := c.StringArg("password")
 		if pwd == "" {
-			return fmt.Errorf("password is required")
+			var err error
+			pwd, err = prompt.Password("Password for new admin")
+			if err != nil {
+				return err
+			}
 		}
 
 		user, err := logic.CreateAdmin(

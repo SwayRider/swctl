@@ -8,6 +8,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var Reverse = &cli.Command{
@@ -37,6 +38,7 @@ var Reverse = &cli.Command{
 			Usage: "Preferred language for results (e.g. en, nl)",
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		latStr := c.StringArg("lat")
 		lonStr := c.StringArg("lon")

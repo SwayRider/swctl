@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var ChangePassword = &cli.Command{
@@ -16,17 +17,22 @@ var ChangePassword = &cli.Command{
 	Arguments: []cli.Argument{
 		&cli.StringArg{
 			Name:      "newPassword",
-			UsageText: "<newPassword> The new password",
+			UsageText: "<newPassword> The new password (optional; prompted if omitted)",
 		},
 	},
 	Flags: []cli.Flag{
 		flags.Required(flags.User("AUTH_USER")),
 		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		newPassword := c.StringArg("newPassword")
 		if newPassword == "" {
-			return fmt.Errorf("newPassword is required")
+			var err error
+			newPassword, err = prompt.Password("New password")
+			if err != nil {
+				return err
+			}
 		}
 
 		msg, err := logic.ChangePassword(

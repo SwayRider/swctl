@@ -3,6 +3,7 @@ package region
 import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var Command = &cli.Command{
@@ -16,6 +17,7 @@ var Command = &cli.Command{
 		flags.Required(flags.User("AUTH_USER")),
 		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
+	Before: prompt.BeforeFillPassword,
 	Commands: []*cli.Command{
 		SearchPoint,
 		SearchBox,
