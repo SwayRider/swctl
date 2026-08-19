@@ -17,7 +17,7 @@ func Ping(host string, port int) error {
 	if err != nil {
 		return err
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 	return client.Ping()
 }
 
@@ -26,6 +26,6 @@ func HealthCheck(host string, port int, component string) (healthclient.ServiceS
 	if err != nil {
 		return "", err
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 	return client.Check(component)
 }

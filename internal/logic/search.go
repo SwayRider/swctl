@@ -83,7 +83,7 @@ func Geocode(
 	if err != nil {
 		return
 	}
-	defer authClient.Close()
+	defer func() { _ = authClient.Close() }()
 
 	accessToken, _, err := authClient.Login(user, password, false)
 	if err != nil {
@@ -94,7 +94,7 @@ func Geocode(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	q := searchclient.SearchQuery{
 		Text: query,
@@ -137,7 +137,7 @@ func ReverseGeocode(
 	if err != nil {
 		return
 	}
-	defer authClient.Close()
+	defer func() { _ = authClient.Close() }()
 
 	accessToken, _, err := authClient.Login(user, password, false)
 	if err != nil {
@@ -148,7 +148,7 @@ func ReverseGeocode(
 	if err != nil {
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	q := searchclient.ReverseGeocodeQuery{
 		Point:    searchclient.Coordinate{Latitude: lat, Longitude: lon},
