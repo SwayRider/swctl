@@ -17,6 +17,7 @@ Management CLI tool for the SwayRider platform. Provides command-line access to 
     - [auth create-service-client](#auth-create-service-client)
     - [auth list-service-clients](#auth-list-service-clients)
     - [auth delete-service-client](#auth-delete-service-client)
+    - [auth ensure-service-client](#auth-ensure-service-client)
     - [auth invite-user](#auth-invite-user)
     - [auth revoke-invite](#auth-revoke-invite)
     - [auth list-invites](#auth-list-invites)
@@ -371,6 +372,36 @@ swctl auth delete-service-client <clientId> [--user USER] [--password PASSWORD]
 
 ```bash
 swctl auth delete-service-client abc123def456...
+```
+
+---
+
+#### auth ensure-service-client
+
+Idempotently create a service client and write its credentials to a file. If the output file already exists and is non-empty, the command skips registration (safe to call repeatedly, e.g. in container startup scripts).
+
+**Alias:** `esc`
+
+```
+swctl auth ensure-service-client <name> <scope...> --output FILE [flags]
+```
+
+| Argument | Description |
+|---|---|
+| `name` | Name of the service client |
+| `scope...` | One or more scopes to grant (space-separated) |
+
+| Flag | Env var | Default | Description |
+|---|---|---|---|
+| `--user`, `-u` | `AUTH_USER` | — | Admin email (required) |
+| `--password`, `-p` | `AUTH_PASSWORD` | — | Admin password (required) |
+| `--output`, `-o` | — | — | Write credentials to this file in `KEY=VALUE` format (required) |
+| `--retries` | — | `10` | Number of connection retries (3s delay between attempts) |
+
+**Example:**
+
+```bash
+swctl auth ensure-service-client swayrider-api read:tiles write:routes --output creds.env
 ```
 
 ---
