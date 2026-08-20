@@ -10,6 +10,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var ListInvites = &cli.Command{
@@ -34,6 +35,7 @@ var ListInvites = &cli.Command{
 			Usage: "Filter by registration status: true = registered only, false = pending only (omit for all)",
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		var registered *bool
 		if c.IsSet("registered") {

@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var Geocode = &cli.Command{
@@ -40,6 +41,7 @@ var Geocode = &cli.Command{
 			Usage: "Focus point longitude",
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		query := c.StringArg("query")
 		if query == "" {

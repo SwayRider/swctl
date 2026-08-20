@@ -6,6 +6,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var WhoAmI = &cli.Command{
@@ -16,6 +17,7 @@ var WhoAmI = &cli.Command{
 		flags.Required(flags.User("AUTH_USER")),
 		flags.Required(flags.Password("AUTH_PASSWORD")),
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		user, err := logic.WhoAmI(
 			c.String("auth-host"),

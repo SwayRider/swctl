@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var CreateUser = &cli.Command{
@@ -20,7 +21,7 @@ var CreateUser = &cli.Command{
 		},
 		&cli.StringArg{
 			Name:      "password",
-			UsageText: "<password> The password of the user",
+			UsageText: "<password> The password of the user (optional; prompted if omitted)",
 		},
 	},
 	Flags: []cli.Flag{
@@ -39,6 +40,7 @@ var CreateUser = &cli.Command{
 			Required: false,
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		email := c.StringArg("email")
 		if email == "" {
@@ -46,7 +48,11 @@ var CreateUser = &cli.Command{
 		}
 		password := c.StringArg("password")
 		if password == "" {
-			return fmt.Errorf("password is required")
+			var err error
+			password, err = prompt.Password("Password for new user")
+			if err != nil {
+				return err
+			}
 		}
 
 		user, err := logic.CreateUser(

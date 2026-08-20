@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/swayrider/swctl/internal/flags"
 	"github.com/swayrider/swctl/internal/logic"
+	"github.com/swayrider/swctl/internal/prompt"
 )
 
 var CreateServiceClient = &cli.Command{
@@ -34,6 +35,7 @@ var CreateServiceClient = &cli.Command{
 			Usage:   "The description of the service client",
 		},
 	},
+	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		name := c.StringArg("name")
 		if name == "" {
