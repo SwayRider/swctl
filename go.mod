@@ -5,8 +5,8 @@ go 1.26.2
 require (
 	github.com/jedib0t/go-pretty/v6 v6.7.10
 	github.com/joho/godotenv v1.5.1
-	github.com/swayrider/grpcclients v0.1.8-0.20260825091345-f02752704ed9
-	github.com/swayrider/swlib v0.1.10-0.20260825091750-8ad760773095
+	github.com/swayrider/grpcclients v0.1.8
+	github.com/swayrider/swlib v0.1.10
 	github.com/urfave/cli/v3 v3.8.0
 	golang.org/x/term v0.45.0
 	google.golang.org/grpc v1.80.0
@@ -16,7 +16,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/swayrider/protos v0.1.5-0.20260825090901-5e0ab7c72991 // indirect
+	github.com/swayrider/protos v0.1.5 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.36.0 // indirect
