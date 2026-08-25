@@ -85,7 +85,7 @@ func Geocode(
 	}
 	defer func() { _ = authClient.Close() }()
 
-	accessToken, _, err := authClient.Login(user, password, false)
+	accessToken, _, _, _, err := authClient.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -139,7 +139,7 @@ func ReverseGeocode(
 	}
 	defer func() { _ = authClient.Close() }()
 
-	accessToken, _, err := authClient.Login(user, password, false)
+	accessToken, _, _, _, err := authClient.Login(user, password, false)
 	if err != nil {
 		return
 	}

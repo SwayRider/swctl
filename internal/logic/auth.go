@@ -44,7 +44,7 @@ func CreateAdmin(
 	}
 	defer func() { _ = client.Close() }()
 
-	adminAccessToken, _, err := client.Login(user, password, false)
+	adminAccessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func CreateUser(
 	}
 	defer func() { _ = client.Close() }()
 
-	adminAccessToken, _, err := client.Login(user, password, false)
+	adminAccessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -107,7 +107,7 @@ func CreateUser(
 	if setVerified {
 		var userAccessToken, token string
 
-		userAccessToken, _, err = client.Login(userEmail, userPassword, false)
+		userAccessToken, _, _, _, err = client.Login(userEmail, userPassword, false)
 		if err != nil {
 			return
 		}
@@ -163,7 +163,7 @@ func CreateServiceClient(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -191,7 +191,7 @@ func ListServiceClients(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -223,7 +223,7 @@ func WhoAmI(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -254,7 +254,7 @@ func GetUser(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -292,7 +292,7 @@ func ChangePassword(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -314,7 +314,7 @@ func DeleteServiceClient(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -336,7 +336,7 @@ func InviteUser(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -358,7 +358,7 @@ func RevokeInvite(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}
@@ -382,7 +382,7 @@ func ListInvites(
 	}
 	defer func() { _ = client.Close() }()
 
-	accessToken, _, err := client.Login(user, password, false)
+	accessToken, _, _, _, err := client.Login(user, password, false)
 	if err != nil {
 		return
 	}

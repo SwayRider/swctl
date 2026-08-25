@@ -20,7 +20,7 @@ func regionToken(authHost string, authPort int, user, password string) (string, 
 		return "", err
 	}
 	defer func() { _ = authClient.Close() }()
-	token, _, err := authClient.Login(user, password, false)
+	token, _, _, _, err := authClient.Login(user, password, false)
 	return token, err
 }
 

@@ -1,9 +1,11 @@
 package auth
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/urfave/cli/v3"
@@ -48,24 +50,45 @@ var EnsureServiceClient = &cli.Command{
 	Before: prompt.BeforeFillPassword,
 	Action: func(ctx context.Context, c *cli.Command) error {
 		output := c.String("output")
-
-		// Idempotency: skip if credentials file already exists and is non-empty.
-		if fi, err := os.Stat(output); err == nil && fi.Size() > 0 {
-			fmt.Printf("credentials already present at %s, skipping registration\n", output)
-			return nil
-		}
-
 		name := c.StringArg("name")
 		retries := c.Int("retries")
+		authHost := c.String("auth-host")
+		authPort := c.Int("auth-port")
+		user := c.String("user")
+		password := c.String("password")
+
+		// Idempotency: a local credentials file alone isn't enough to skip --
+		// it survives things the file knows nothing about (a reset/fresh
+		// database, or being pointed at a different authservice), leaving
+		// stale credentials that no longer exist server-side. Only skip once
+		// the target authservice confirms THIS SPECIFIC client ID is still
+		// there -- matching by name alone isn't enough either, since two
+		// different authservice instances can each have their own same-named
+		// "swayrider-api" client with different IDs/secrets.
+		if fi, err := os.Stat(output); err == nil && fi.Size() > 0 {
+			existingId, parseErr := readClientId(output)
+			var exists bool
+			if parseErr == nil {
+				exists, err = serviceClientIdExistsWithRetries(authHost, authPort, user, password, existingId, retries)
+				if err != nil {
+					return fmt.Errorf("failed to check for existing service client %q after %d attempts: %w", name, retries+1, err)
+				}
+			}
+			if exists {
+				fmt.Printf("credentials already present at %s and service client %s still exists in authservice, skipping registration\n", output, existingId)
+				return nil
+			}
+			fmt.Printf("credentials file at %s is stale (client not found in authservice -- reset database, or different authservice?) -- re-registering\n", output)
+		}
 
 		var clientId, clientSecret string
 		var err error
 		for i := range retries + 1 {
 			clientId, clientSecret, err = logic.CreateServiceClient(
-				c.String("auth-host"),
-				c.Int("auth-port"),
-				c.String("user"),
-				c.String("password"),
+				authHost,
+				authPort,
+				user,
+				password,
 				name,
 				"",
 				c.StringArgs("scope"),
@@ -102,4 +125,58 @@ var EnsureServiceClient = &cli.Command{
 func isAlreadyExists(err error) bool {
 	s, ok := status.FromError(err)
 	return ok && s.Code() == codes.AlreadyExists
+}
+
+// readClientId extracts SWAYRIDER_API_CLIENT_ID from a credentials file
+// previously written by this command (KEY=VALUE per line).
+func readClientId(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer func() { _ = f.Close() }()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		key, value, found := strings.Cut(scanner.Text(), "=")
+		if found && key == "SWAYRIDER_API_CLIENT_ID" && value != "" {
+			return value, nil
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+	return "", fmt.Errorf("SWAYRIDER_API_CLIENT_ID not found in %s", path)
+}
+
+// serviceClientIdExistsWithRetries reports whether a service client with the
+// given ID currently exists in the target authservice, retrying (like the
+// create path) while authservice is still booting. A large pageSize is used
+// instead of paging through results -- a local/dev authservice only ever
+// holds a handful of service clients, so this is simpler than it's worth
+// making exhaustive.
+func serviceClientIdExistsWithRetries(
+	authHost string, authPort int, user, password, clientId string, retries int,
+) (bool, error) {
+	var clients []*logic.ServiceClient
+	var err error
+	for i := range retries + 1 {
+		clients, err = logic.ListServiceClients(authHost, authPort, user, password, 1, 100)
+		if err == nil {
+			break
+		}
+		if i < retries {
+			fmt.Printf("authservice not ready (attempt %d/%d), retrying in 3s...\n", i+1, retries+1)
+			time.Sleep(3 * time.Second)
+		}
+	}
+	if err != nil {
+		return false, err
+	}
+	for _, sc := range clients {
+		if sc.ClientId() == clientId {
+			return true, nil
+		}
+	}
+	return false, nil
 }
